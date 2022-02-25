@@ -1,6 +1,6 @@
 # PrismJS Animator
 
-Simple code typing/animation library for (Prism)[https://prismjs.com/] syntax highlighter.
+Simple code typing/animation library for [Prism](https://prismjs.com/) syntax highlighter.
 
 ## Basic usage
 
