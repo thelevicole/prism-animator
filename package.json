@@ -1,0 +1,37 @@
+{
+  "name": "@thelevicole/prism-animator",
+  "version": "1.0.0",
+  "description": "Simple code typing/animation library for PrismJS syntax highlighter.",
+  "main": "dist/rism-animator.js",
+  "keywords": [
+    "syntax",
+    "highlighter",
+    "animation",
+    "animator",
+    "typewriter"
+  ],
+  "browserslist": [
+    "last 3 version",
+    "> 1%",
+    "ie 11"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thelevicole/prism-animator.git"
+  },
+  "author": {
+    "name": "Levi Cole",
+    "email": "dev@thelevicole.com"
+  },
+  "bugs": {
+    "url": "https://github.com/thelevicole/prism-animator/issues"
+  },
+  "homepage": "https://thelevicole.com/prism-animator/",
+  "devDependencies": {
+    "laravel-mix": "^6.0.43"
+  },
+  "scripts": {
+    "build": "mix --production",
+    "watch": "mix --production -- --watch --progress"
+  }
+}
