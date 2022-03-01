@@ -2,7 +2,7 @@
   "name": "@thelevicole/prism-animator",
   "version": "1.0.0",
   "description": "Simple code typing/animation library for PrismJS syntax highlighter.",
-  "main": "dist/rism-animator.js",
+  "main": "dist/prism-animator.js",
   "keywords": [
     "syntax",
     "highlighter",
