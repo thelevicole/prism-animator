@@ -152,21 +152,10 @@ if ( window.jQuery ) {
     jQuery.fn.prismAnimator = function( options = {} ) {
 
         options = $.extend( true, {
-            language: 'javascript',
-            code: 'var example = 123;',
-            charactersPerMinute: 200,
-            preClasses: '',
-            codeClasses: '',
+            element: this.get( 0 )
         }, options );
 
-        this._prismAnimator = new PrismAnimator( {
-            element: this.get( 0 ),
-            language: options.language,
-            code: options.code,
-            charactersPerMinute: options.charactersPerMinute,
-            preClasses: options.preClasses,
-            codeClasses: options.codeClasses
-        } );
+        this._prismAnimator = new PrismAnimator( options );
 
         return this;
     };
