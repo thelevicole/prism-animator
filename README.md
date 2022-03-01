@@ -38,6 +38,6 @@ $('#editor').prismAnimator({
 | `language` | `String` | The name of the language definition. | `null` | `true` |
 | `code` | `String` | A string with the code to be highlighted. | `null` | `true` |
 | `charactersPerMinute` | `Number` | The number of characters to print per minute. | `200` | `false` |
-| `preClasses` | `String|Array` | Classes to add to the generated `<pre>` element. | `null` | `false` |
-| `codeClasses` | `String|Array` | Classes to add to the generated `<code>` element. | `null` | `false` |
+| `preClasses` | `String`, `Array` | Classes to add to the generated `<pre>` element. | `null` | `false` |
+| `codeClasses` | `String`, `Array` | Classes to add to the generated `<code>` element. | `null` | `false` |
 | `drawCallback` | `Function` | Callback function called everytime a new draw is made. | `null` | `false` |
