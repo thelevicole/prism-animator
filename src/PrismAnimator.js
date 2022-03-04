@@ -130,7 +130,7 @@ class PrismAnimator {
         if ( shouldDrawFrame ) {
             this._lastTimestamp = timestamp - ( elapsed % this.fpsInterval );
             this.currentCharacterIndex++;
-            this.elements.code.innerHTML = this.codeString.substring( 0, this.currentCharacterIndex );;
+            this.elements.code.innerHTML = this.escapeString( this.codeString.substring( 0, this.currentCharacterIndex ) );
 
             Prism.highlightElement( this.elements.code );
 
@@ -144,6 +144,30 @@ class PrismAnimator {
         }
     }
 
+    escapeString( string ) {
+        string = '' + string;
+
+        const replacements = this.getOption( 'replacements', [
+            [ /&/g, '&amp;' ],
+            [ /'/g, '&apos;' ],
+            [ /"/g, '&quot;' ],
+            [ /</g, '&lt;' ],
+            [ />/g, '&gt;' ],
+            [ /\r\n/g, '&#13;' ],
+            [ /[\r\n]/g, '&#13;' ],
+        ] );
+
+        for ( let i = 0; i < replacements.length; i++ ) {
+            string = string.replace( ...replacements[ i ] );
+        }
+
+        if ( this.getOption( 'escapeCallback' ) ) {
+            string = this.getOption( 'escapeCallback' ).apply( this, [ string, replacements ] );
+        }
+
+        return string;
+    }
+
 }
 
 window.PrismAnimator = PrismAnimator;
@@ -155,7 +179,7 @@ if ( window.jQuery ) {
             element: this.get( 0 )
         }, options );
 
-        this._prismAnimator = new PrismAnimator( options );
+        new PrismAnimator( options );
 
         return this;
     };
