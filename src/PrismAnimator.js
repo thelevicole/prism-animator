@@ -43,14 +43,27 @@ class PrismAnimator {
     fpsInterval;
 
     /**
+     * @type {[]}
+     */
+    stringReplacements = [];
+
+    /**
      * @type {number}
+     * @private
      */
     _startTimestamp = 0;
 
     /**
      * @type {number}
+     * @private
      */
     _lastTimestamp = 0;
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    _isPaused = false;
 
     /**
      * @param {object} options
@@ -67,6 +80,16 @@ class PrismAnimator {
 
         this.charactersPerMinute = this.getOption( 'charactersPerMinute', 200 );
         this.fpsInterval = 1000 / ( this.charactersPerMinute / 60 );
+
+        this.stringReplacements = this.getOption( 'replacements', [
+            [ /&/g, '&amp;' ],
+            [ /'/g, '&apos;' ],
+            [ /"/g, '&quot;' ],
+            [ /</g, '&lt;' ],
+            [ />/g, '&gt;' ],
+            [ /\r\n/g, '&#13;' ],
+            [ /[\r\n]/g, '&#13;' ],
+        ] );
 
         // Sanity checks.
         if ( !( 'Prism' in window ) ) {
@@ -110,14 +133,51 @@ class PrismAnimator {
         }
 
         // Begin animation.
-        requestAnimationFrame( this.update.bind( this ) );
+        this.reset();
+        this.play();
     }
 
+    /**
+     * Get an user defined option or return default.
+     *
+     * @param {string} key
+     * @param {*} defaultValue
+     * @return {*}
+     */
     getOption( key, defaultValue ) {
         return this.options[ key ] || defaultValue;
     }
 
-    update( timestamp = 0 ) {
+    /**
+     * Reset the entire animation and DOM.
+     */
+    reset() {
+        this._startTimestamp = 0;
+        this._lastTimestamp = 0;
+        this.currentCharacterIndex = 0;
+        this.elements.code.innerHTML = '';
+    }
+
+    /**
+     * Play the animation
+     */
+    play() {
+        this._isPaused = false;
+        requestAnimationFrame( this._drawFrame.bind( this ) );
+    }
+
+    /**
+     * Pause the animation
+     */
+    pause() {
+        this._isPaused = true;
+    }
+
+    /**
+     * @param timestamp
+     * @private
+     */
+    _drawFrame( timestamp = 0 ) {
 
         if ( !this._startTimestamp ) {
             this._startTimestamp = timestamp;
@@ -139,30 +199,28 @@ class PrismAnimator {
             }
         }
 
-        if ( this.currentCharacterIndex < this.codeStringlength ) {
-            requestAnimationFrame( this.update.bind( this ) );
+        if ( this.currentCharacterIndex < this.codeStringlength && !this._isPaused ) {
+            this.play();
         }
     }
 
-    escapeString( string ) {
-        string = '' + string;
+    /**
+     * Basic string escaping. Disabed by passing an empty array to the `replacements` option i.e. { replacements: [] }
+     *
+     * @param inputString
+     * @return {string}
+     */
+    escapeString( inputString ) {
+        let string = '' + inputString;
 
-        const replacements = this.getOption( 'replacements', [
-            [ /&/g, '&amp;' ],
-            [ /'/g, '&apos;' ],
-            [ /"/g, '&quot;' ],
-            [ /</g, '&lt;' ],
-            [ />/g, '&gt;' ],
-            [ /\r\n/g, '&#13;' ],
-            [ /[\r\n]/g, '&#13;' ],
-        ] );
+        const replacements = this.stringReplacements;
 
         for ( let i = 0; i < replacements.length; i++ ) {
             string = string.replace( ...replacements[ i ] );
         }
 
         if ( this.getOption( 'escapeCallback' ) ) {
-            string = this.getOption( 'escapeCallback' ).apply( this, [ string, replacements ] );
+            string = this.getOption( 'escapeCallback' ).apply( this, [ string, replacements, inputString ] );
         }
 
         return string;
@@ -173,14 +231,13 @@ class PrismAnimator {
 window.PrismAnimator = PrismAnimator;
 
 if ( window.jQuery ) {
+    /**
+     * @param {object} options
+     * @return {PrismAnimator}
+     */
     jQuery.fn.prismAnimator = function( options = {} ) {
-
-        options = $.extend( true, {
+        return new PrismAnimator( $.extend( true, {
             element: this.get( 0 )
-        }, options );
-
-        new PrismAnimator( options );
-
-        return this;
+        }, options ) );
     };
 }

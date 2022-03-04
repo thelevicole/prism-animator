@@ -29,11 +29,26 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center">
+		<div class="row justify-content-center mb-5">
 			<div class="col-lg-10 col-xl-8">
 				<h2>Animating &lt;script&gt; contents</h2>
 				<p>By grabbing the contents of the <code>script#example-2-code</code> tag we can animate exact code that initiates the animation.</p>
 				<div id="example-2"></div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center mb-5">
+			<div class="col-lg-10 col-xl-8">
+				<h2>Controls</h2>
+				<p>The PrismAnimator class comes with methods to play, pause and reset the animation.</p>
+				<div id="example-3">
+					<div class="editor"></div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-success" data-action="play">Play</button>
+						<button type="button" class="btn btn-warning" data-action="pause">Pause</button>
+						<button type="button" class="btn btn-danger" data-action="reset">Reset</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -71,6 +86,32 @@
 				code: code,
 				charactersPerMinute: cpm
 			} );
+
+		} )();
+	</script>
+	<script id="example-3-code">
+		( function() {
+			'use strict';
+
+			const container = document.getElementById( 'example-3' );
+			const editor = container.querySelector( '.editor' );
+			const play = container.querySelector( '[data-action="play"]' );
+			const pause = container.querySelector( '[data-action="pause"]' );
+			const reset = container.querySelector( '[data-action="reset"]' );
+
+			let code = document.getElementById( 'example-3-code' ).innerHTML;
+				code = code.replace( /^\t{2}/gm, '' ).trim(); // Remove whitespace.
+
+			const animator = new PrismAnimator( {
+				element: editor,
+				language: 'javascript',
+				code: code,
+				charactersPerMinute: 1000
+			} );
+
+			play.addEventListener( 'click', () => animator.play() );
+			pause.addEventListener( 'click', () => animator.pause() );
+			reset.addEventListener( 'click', () => animator.reset() );
 
 		} )();
 	</script>
