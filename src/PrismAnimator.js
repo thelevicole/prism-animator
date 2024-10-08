@@ -100,7 +100,7 @@ class PrismAnimator {
             throw new Error( `PrismAnimator is missing a required option 'language'. Pass via the constructor object e.g. new PrismAnimator( { language: 'javascript' } )` );
         } else if ( !this.codeString ) {
             throw new Error( `PrismAnimator is missing a required option 'code'. Pass via the constructor object e.g. new PrismAnimator( { code: 'var example = 123;' } )` );
-        } else if ( !( this.language in Prism.languages ) ) {
+        } else if ( !( this.language in this.prismInstance.languages ) ) {
             throw new Error( `Language "${this.language}" not supported.` );
         }
 
