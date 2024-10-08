@@ -92,7 +92,7 @@ class PrismAnimator {
         ] );
 
         // Sanity checks.
-        if ( !( 'Prism' in window ) ) {
+        if ( !this.prismInstance ) {
             throw new Error( 'Prism library not loaded' );
         } else if ( !this.elements.parent ) {
             throw new Error( `PrismAnimator is missing a required option 'element'. Pass via the constructor object e.g. new PrismAnimator( { element: document.getElementById( 'example' ) } )` );
@@ -135,6 +135,10 @@ class PrismAnimator {
         // Begin animation.
         this.reset();
         this.play();
+    }
+
+    get prismInstance() {
+        return this.getOption('prism', window.Prism || null)
     }
 
     /**
@@ -192,7 +196,7 @@ class PrismAnimator {
             this.currentCharacterIndex++;
             this.elements.code.innerHTML = this.escapeString( this.codeString.substring( 0, this.currentCharacterIndex ) );
 
-            Prism.highlightElement( this.elements.code );
+            this.prismInstance.highlightElement( this.elements.code );
 
             if ( this.getOption( 'drawCallback' ) ) {
                 this.getOption( 'drawCallback' ).apply( this );
